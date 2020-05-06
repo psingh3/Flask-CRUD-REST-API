@@ -21,16 +21,16 @@ class Item(Resource):
         help="Every item need a store id."
     )
 
-    @jwt_required
-    def get(self, name):
+    # @jwt_required
+    def get(self, name: str):
         item = ItemModel.find_by_name(name)
         print(item)
         if item:
             return item.json()
         return {'message': 'Item not found'}, 404
 
-    @fresh_jwt_required
-    def post(self, name):
+    # @fresh_jwt_required
+    def post(self, name: str):
         if ItemModel.find_by_name(name):
             return {'message': f"An item with name {name} already exists."}, 400
 
@@ -45,8 +45,8 @@ class Item(Resource):
 
         return item.json(), 201
 
-    @jwt_required
-    def delete(self, name):
+    # @jwt_required
+    def delete(self, name: str):
         claims = get_jwt_claims()
         if not claims['is_admin']:
             return {'message': 'Admin privilege required.'}, 401
@@ -57,7 +57,7 @@ class Item(Resource):
 
         return {'message': 'Item deleted'}
 
-    def put(self, name):
+    def put(self, name: str):
         data = Item.parser.parse_args()
 
         item = ItemModel.find_by_name(name)
@@ -74,13 +74,14 @@ class Item(Resource):
         return item.json()
 
 class ItemList(Resource):
-    @jwt_optional
+    # @jwt_optional
     def get(self):
-        user_id = get_jwt_identity()
-        items = [item.json() for item in ItemModel.find_all()]
-        if user_id:
-            return {'items': items}, 200
-        return {
-            'items': [item['name'] for item in items],
-            'message': '`more data availble if you log in.'
-            }, 200
+        # user_id = get_jwt_identity()
+        # items = [item.json() for item in ItemModel.find_all()]
+        # if user_id:
+        #     return {'items': items}, 200
+        # return {
+        #     'items': [item['name'] for item in items],
+        #     'message': '`more data availble if you log in.'
+        #     }, 200
+        return {'Items': [item.json() for item in ItemModel.find_all()]}
