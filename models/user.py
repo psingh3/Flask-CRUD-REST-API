@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Dict, List, Union
 
 from db import db
 
@@ -22,15 +22,15 @@ class UserModel(db.Model):
         }
 
     @classmethod
-    def find_by_username(cls, username: str):
+    def find_by_username(cls, username: str) -> "UserModel":
         return cls.query.filter_by(username=username).first()
 
     @classmethod
-    def find_by_id(cls, _id: int):
+    def find_by_id(cls, _id: int) -> "UserModel":
         return cls.query.filter_by(id=_id).first()
 
     @classmethod
-    def find_all(cls):
+    def find_all(cls) -> List["UserModel"]:
         return cls.query.all()
 
     def save_to_db(self) -> None:
